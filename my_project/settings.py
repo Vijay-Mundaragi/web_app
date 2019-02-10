@@ -124,3 +124,8 @@ STATIC_URL = '/static/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 #crispy form by deafult is configured to use bootstarp2 which is outdate, hence change it to bootstrap4
+
+
+LOGIN_REDIRECT_URL = 'blog-home'
+
+LOGIN_URL = 'login'
