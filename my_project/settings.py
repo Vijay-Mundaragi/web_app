@@ -129,3 +129,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'blog-home'
 
 LOGIN_URL = 'login'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # full path to directory where we would like django to store uploaded files
+
+MEDIA_URL = '/media/'
