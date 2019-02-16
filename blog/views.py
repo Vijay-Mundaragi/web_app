@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
 
 # Create your views here.
@@ -50,6 +50,21 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):	#view
 		if self.request.user == post.author:
 			return True
 		return False
+
+
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+	model = Post
+	success_url = '/'
+
+	def test_func(self):
+		#to restrict update post only to author of particular post
+		#get the exact post we are currently updating
+		post = self.get_object() #get_oject is method of UpdateView
+		if self.request.user == post.author:
+			return True
+		return False
+
+
 
 
 
