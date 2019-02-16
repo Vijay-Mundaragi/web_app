@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.models import User
 from .models import Post
 
 # Create your views here.
@@ -16,8 +17,21 @@ class PostListView(ListView):
 	model = Post 	# what model to query inorder to create the list
 	template_name = 'blog/home.html' # returns looks for <app>/<model>_<view_type>.html by default
 	context_object_name = 'posts'	 #  in our template we are iterating over variable posts. if we omit this, we need to include 
-									 #  object_list in place of posts as this is default name 
+									 #  object in place of posts as this is default name 
 	ordering = ['-date_posted'] 
+	paginate_by = 5
+
+
+class UserPostListView(ListView):
+	model = Post
+	template_name = 'blog/user_posts.html'
+	context_object_name = 'posts'					
+	paginate_by = 5
+
+	#overriding the query set method to return only posts of particular user
+	def get_queryset(self):
+		user = get_object_or_404(User, username=self.kwargs.get('username'))
+		return Post.objects.filter(author=user).order_by('-date_posted')
 
 
 class PostDetailView(DetailView):
