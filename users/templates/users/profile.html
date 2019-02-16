@@ -11,11 +11,11 @@
 	    </div>
 	  </div>
 	  <!-- FORM HERE -->
-	  <!-- enctype="multipart/form-data" to ake the form work with image upload -->
+	  <!-- enctype="multipart/form-data" to make the form work with image upload -->
 	  <form method="POST" enctype="multipart/form-data"> 
 		{% csrf_token %}
 		<fieldset class="form-group">
-			<legend class="border-bottom m-4">
+			<legend class="border-bottom">
 				Edit Profile
 			</legend>
 			{{ user_form|crispy }}
