@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Post
 
 # Create your views here.
@@ -32,6 +32,25 @@ class PostCreateView(LoginRequiredMixin, CreateView):	#view with a form where we
 	def form_valid(self, form):
 		form.instance.author = self.request.user
 		return super().form_valid(form)
+
+
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):	#view with a form where we create a new post
+	model = Post
+	fields = ['title', 'content']
+
+	#overriding from_valid method else we get not_null constraint failed error (NOT NULL constraint failed)
+	def form_valid(self, form):
+		form.instance.author = self.request.user
+		return super().form_valid(form)
+
+	def test_func(self):
+		#to restrict update post only to author of particular post
+		#get the exact post we are currently updating
+		post = self.get_object() #get_oject is method of UpdateView
+		if self.request.user == post.author:
+			return True
+		return False
+
 
 
 def about(request):
